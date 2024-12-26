@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"lld/src/design_patterns/observer_design_pattern"
 	strategy_design_pattern "lld/src/design_patterns/stategy_design_pattern"
 	"lld/src/solid/lsp"
 	"lld/src/solid/srp" // Import the srp package
@@ -28,5 +29,17 @@ func main() {
 
 	payment.SetStrategy(&strategy_design_pattern.PaypalPayment{PaypalAmount: 101})
 	payment.ProcessPayment(101)
+
+	weather := &observer_design_pattern.Weather{}
+
+	phone := &observer_design_pattern.PhoneDisplay{ID: "1"}
+	desk := &observer_design_pattern.DesktopDisplay{ID: "2"}
+
+	weather.AddOberserver(phone)
+	weather.AddOberserver(desk)
+
+	weather.SetTemp(12.0)
+	weather.RemoveObserver(desk)
+	weather.SetTemp(24.0)
 
 }
