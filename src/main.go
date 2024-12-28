@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"lld/src/design_patterns/decorator_design_pattern"
+	"lld/src/design_patterns/factory_design_pattern"
 	"lld/src/design_patterns/observer_design_pattern"
 	strategy_design_pattern "lld/src/design_patterns/stategy_design_pattern"
 	"lld/src/solid/lsp"
@@ -54,4 +55,27 @@ func main() {
 
 	fmt.Printf("%s : $%d\n", coffee.Description(), coffee.Cost())
 
+	// Request a car
+	car, err := factory_design_pattern.VehicleFactory("car")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(car.Drive())
+
+	// Request a bike
+	bike, err := factory_design_pattern.VehicleFactory("bike")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(bike.Drive())
+
+	// Request an unknown vehicle type
+	unknown, err := factory_design_pattern.VehicleFactory("plane")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(unknown.Drive())
 }
