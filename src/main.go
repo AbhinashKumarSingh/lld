@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"lld/src/design_patterns/decorator_design_pattern"
 	"lld/src/design_patterns/observer_design_pattern"
 	strategy_design_pattern "lld/src/design_patterns/stategy_design_pattern"
 	"lld/src/solid/lsp"
@@ -41,5 +42,16 @@ func main() {
 	weather.SetTemp(12.0)
 	weather.RemoveObserver(desk)
 	weather.SetTemp(24.0)
+
+	var coffee decorator_design_pattern.Coffee = &decorator_design_pattern.SimpleCoffee{}
+	fmt.Printf("%s : $%d\n", coffee.Description(), coffee.Cost())
+
+	coffee = decorator_design_pattern.NewMilkDecorator(coffee)
+	fmt.Printf("%s : $%d\n", coffee.Description(), coffee.Cost())
+	coffee = decorator_design_pattern.NewSugarDecorator(coffee)
+	fmt.Printf("%s : $%d\n", coffee.Description(), coffee.Cost())
+	coffee = decorator_design_pattern.NewWhippedCreamDecorator(coffee)
+
+	fmt.Printf("%s : $%d\n", coffee.Description(), coffee.Cost())
 
 }
