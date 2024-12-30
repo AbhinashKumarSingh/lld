@@ -6,6 +6,7 @@ import (
 	"lld/src/design_patterns/factory_design_pattern"
 	"lld/src/design_patterns/observer_design_pattern"
 	strategy_design_pattern "lld/src/design_patterns/stategy_design_pattern"
+	"lld/src/parking_lot"
 	"lld/src/solid/lsp"
 	"lld/src/solid/srp" // Import the srp package
 )
@@ -72,10 +73,68 @@ func main() {
 	fmt.Println(bike.Drive())
 
 	// Request an unknown vehicle type
-	unknown, err := factory_design_pattern.VehicleFactory("plane")
+	_, err = factory_design_pattern.VehicleFactory("plane")
 	if err != nil {
 		fmt.Println("Error:", err)
+		// return
+	}
+	fmt.Printf("No ticket associated with this exit gate.")
+	// fmt.Println(unknown.Drive())
+
+	// Create parking spots for two-wheelers and four-wheelers
+	parkingTypeManager := &parking_lot.ParkingTypeManager{}
+
+	// Create a ParkingSpotManager instance
+	parkingSpotManager := &parking_lot.ParkingSpotManager{}
+
+	// Create and add parking spaces for two-wheelers and four-wheelers
+
+	twoWheelerSpot := &parking_lot.TwoWheelerParkingSpot{
+		ID:      1,
+		IsEmpty: true,
+	}
+	fourWheelerSpot := &parking_lot.FourWheelerParkingSpot{ID: 2, IsEmpty: true}
+
+	if twoWheelerSpot != nil {
+		parkingSpotManager.AddParkingSpace(twoWheelerSpot)
+	}
+	if fourWheelerSpot != nil {
+		parkingSpotManager.AddParkingSpace(fourWheelerSpot)
+	}
+
+	// Create an entrance gate
+	entranceGate := &parking_lot.EntranceGate{
+		GateNumber:         1,
+		ParkingSpotFactory: parkingTypeManager,
+		ParkingSpotManager: parkingSpotManager,
+	}
+
+	// Create a two-wheeler vehicle and book a parking spot
+	twoWheeler := &parking_lot.Vehicle{Type: "TwoWheeler", Plate: "TW1234"}
+	twoWheelerTicket, err := entranceGate.BookSpot(twoWheeler)
+	if err != nil {
+		fmt.Println("Error while booking spot:", err)
 		return
 	}
-	fmt.Println(unknown.Drive())
+
+	// Create exit gate to process exit and payment
+	exitGate := parking_lot.NewExitGate(1, nil, nil)
+	exitGate.SetTicket(twoWheelerTicket)
+
+	// Process the exit for the two-wheeler
+	fmt.Println("Processing exit for TwoWheeler...")
+	exitGate.ProcessExit()
+
+	// Create a four-wheeler vehicle and book a parking spot
+	fourWheeler := &parking_lot.Vehicle{Type: "FourWheeler", Plate: "FW5678"}
+	fourWheelerTicket, err := entranceGate.BookSpot(fourWheeler)
+	if err != nil {
+		fmt.Println("Error while booking spot:", err)
+		return
+	}
+
+	// Process the exit and payment for the four-wheeler
+	exitGate.SetTicket(fourWheelerTicket)
+	fmt.Println("Processing exit for FourWheeler...")
+	exitGate.ProcessExit()
 }
