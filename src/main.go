@@ -1,7 +1,8 @@
 package main
 
 import (
-	"lld/src/tic_tac_toe"
+	"fmt"
+	"lld/src/coupon_discount"
 )
 
 func main() {
@@ -131,7 +132,17 @@ func main() {
 	// fmt.Println("Processing exit for FourWheeler...")
 	// exitGate.ProcessExit()
 
-	game := tic_tac_toe.NewGame(3, []string{"Abhi", "Shiv"})
+	// game := tic_tac_toe.NewGame(3, []string{"Abhi", "Shiv"})
 
-	game.StartGame()
+	// game.StartGame()
+
+	p1 := &coupon_discount.Product{Name: "a", Price: 1000}
+	p2 := &coupon_discount.Product{Name: "b", Price: 2000}
+
+	shoppingCart := &coupon_discount.ShoppingCart{}
+	shoppingCart.AddToCartPercent(*p1)
+	shoppingCart.AddToCartValue(*p2)
+
+	fmt.Printf("%f", shoppingCart.GetTotalPrice())
+
 }
