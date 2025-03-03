@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"lld/src/coupon_discount"
+	"lld/src/short_url"
 )
 
 func main() {
@@ -144,5 +145,7 @@ func main() {
 	shoppingCart.AddToCartValue(*p2)
 
 	fmt.Printf("%f", shoppingCart.GetTotalPrice())
+
+	short_url.Init()
 
 }
